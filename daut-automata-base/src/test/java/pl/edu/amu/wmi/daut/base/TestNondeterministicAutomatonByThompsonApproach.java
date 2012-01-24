@@ -269,7 +269,10 @@ public class TestNondeterministicAutomatonByThompsonApproach extends TestCase {
         assertFalse(automaton.accepts("AA99999"));
         assertFalse(automaton.accepts("AAAA999"));
     }
-    
+
+    /** 
+     * Test przejścia z warunkami kontekstowymi.
+     */
     public final void testContext() {
         final AutomatonSpecification spec = new NaiveAutomatonSpecification();
 
