@@ -306,20 +306,37 @@ public class TestNondeterministicAutomatonByThompsonApproach extends TestCase {
         State q1 = spec.addState();
         State q2 = spec.addState();
         State q3 = spec.addState();
+        State q4 = spec.addState();
+        State q5 = spec.addState();
+        State q6 = spec.addState();
+        State q7 = spec.addState();
+        State q8 = spec.addState();
 
-        spec.addTransition(q0, q1, new CharTransitionLabel('a'));
-        spec.addTransition(q1, q2, new EndOfTextOrLineTransitionLabel());
-        spec.addTransition(q2, q0, new EpsilonTransitionLabel());
+        spec.addTransition(q0, q1, new EpsilonTransitionLabel());
+        spec.addTransition(q0, q2, new EpsilonTransitionLabel());
+        spec.addTransition(q0, q3, new EpsilonTransitionLabel());
+        spec.addTransition(q1, q4, new CharTransitionLabel('a'));
+        spec.addTransition(q4, q5, new CharTransitionLabel('a'));
+        spec.addTransition(q2, q6, new CharTransitionLabel('b'));
+        spec.addTransition(q6, q2, new EpsilonTransitionLabel());
+        spec.addTransition(q6, q7, new EndOfTextOrLineTransitionLabel());
+        spec.addTransition(q3, q8, new CharTransitionLabel('c'));
+        spec.addTransition(q8, q8, new CharTransitionLabel('c'));
+                
 
         spec.markAsInitial(q0);
-        spec.markAsFinal(q0);
-        spec.markAsFinal(q1);
-        spec.markAsFinal(q2);
+        spec.markAsFinal(q5);
+        spec.markAsFinal(q7);
+        spec.markAsFinal(q8);
 
         final NondeterministicAutomatonByThompsonApproach automaton =
                 new NondeterministicAutomatonByThompsonApproach(spec);
 
-        assertTrue(automaton.accepts("a"));
-        assertFalse(automaton.accepts("aa"));
+        assertTrue(automaton.accepts("aa"));
+        assertTrue(automaton.accepts("bb"));
+        assertTrue(automaton.accepts("cccccccccccc"));
+        assertFalse(automaton.accepts("aca"));
+        assertFalse(automaton.accepts("bca"));
+        assertFalse(automaton.accepts("a"));
     }
 }
