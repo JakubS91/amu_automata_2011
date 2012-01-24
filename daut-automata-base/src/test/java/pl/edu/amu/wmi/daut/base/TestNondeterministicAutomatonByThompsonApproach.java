@@ -269,4 +269,29 @@ public class TestNondeterministicAutomatonByThompsonApproach extends TestCase {
         assertFalse(automaton.accepts("AA99999"));
         assertFalse(automaton.accepts("AAAA999"));
     }
+    /** 
+     * Test przejścia z warunkami kontekstowymi.
+     */
+    public final void testContext() {
+        final AutomatonSpecification spec = new NaiveAutomatonSpecification();
+
+        State q0 = spec.addState();
+        State q1 = spec.addState();
+        State q2 = spec.addState();
+
+        spec.addTransition(q0, q1, new CharTransitionLabel('a'));
+        spec.addTransition(q1, q2, new EndOfTextOrLineTransitionLabel());
+        spec.addTransition(q2, q0, new EpsilonTransitionLabel());
+
+        spec.markAsInitial(q0);
+        spec.markAsFinal(q0);
+        spec.markAsFinal(q1);
+        spec.markAsFinal(q2);
+
+        final NondeterministicAutomatonByThompsonApproach automaton =
+                new NondeterministicAutomatonByThompsonApproach(spec);
+
+        assertTrue(automaton.accepts("a"));
+        assertFalse(automaton.accepts("aa"));
+    }
 }

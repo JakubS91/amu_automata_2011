@@ -35,7 +35,8 @@ public class NondeterministicAutomatonByThompsonApproach implements Acceptor {
 
                 for (State someState : currentStates) {
                     List<State> epsilonStates =
-                            new LinkedList<State>(epsilonClosure(someState));
+                            new LinkedList<State>(automaton.getEpsilonClosureWithContext(
+                                    someState, text, i));
 
                     for (State eState : epsilonStates) {
                         if (!currentStates.contains(eState)
@@ -56,11 +57,7 @@ public class NondeterministicAutomatonByThompsonApproach implements Acceptor {
                             LinkedList<OutgoingTransition>(
                             automaton.allOutgoingTransitions(someState));
                     for (OutgoingTransition transition : someStateTransitions) {
-                        if (transition.getTransitionLabel().isContextual()) {
-                            temporaryStates.addAll(
-                                    automaton.getEpsilonClosureWithContext(
-                                    someState, text, i));
-                        } else if (transition.getTransitionLabel().canAcceptCharacter(
+                        if (transition.getTransitionLabel().canAcceptCharacter(
                                 text.charAt(i)) && !temporaryStates.contains(
                                 transition.getTargetState())) {
                             temporaryStates.add(transition.getTargetState());
